@@ -1,0 +1,3 @@
+/home/jc/Documents/Examen1P3/cmake-build-debug/CMakeFiles/Examen1P3.dir
+/home/jc/Documents/Examen1P3/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/jc/Documents/Examen1P3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
