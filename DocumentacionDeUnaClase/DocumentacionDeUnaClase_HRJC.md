@@ -75,3 +75,5 @@ IntCell &IntCell::operator=(int rhs) {
 }
 ```
 El valor de la variable ths de tipo *int* se guarda en el storedValue de la clase y se retorna.<br>
+
+😹 Ya le entendi
