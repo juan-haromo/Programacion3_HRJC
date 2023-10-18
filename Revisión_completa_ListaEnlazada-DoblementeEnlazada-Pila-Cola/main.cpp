@@ -21,7 +21,7 @@ int main() {
     std::cout << "Simple list after clear: ";
     simpleList.print();
 
-/*
+    
     // Test integer Double Linked List
     DLList<int> integerList;
     integerList.push_back(10);
@@ -32,14 +32,14 @@ int main() {
     integerList.insert(a, 12);
     std::cout << "Integer list: ";
     integerList.print();
-    integerList.erase(integerList.begin() + 1);
+    (void)integerList.erase(integerList.begin() + 1);
     std::cout << "Integer list after erase: ";
     integerList.print();
     integerList.clear();
     std::cout << "Integer list after clear: ";
     integerList.print();
     
-    // Test double Double Linked List
+    // Test double Double-Linked List
     DLList<double> doubleList;
     doubleList.push_back(1.5);
     doubleList.push_front(2.5);
@@ -82,7 +82,8 @@ int main() {
     boolList.clear();
     std::cout << "Boolean list after clear: ";
     boolList.print();
-
+    
+    /*
     //Test int Stack
     Stack<int> stack;
     stack.push(1);
@@ -105,7 +106,9 @@ int main() {
     std::cout << "Double Stack after pop: ";
     std::cout << doubleStack.top() << std::endl;
     doubleStack.clear();
+    */
 
+   /*
     //Test Queue
     Queue<int> queue;
     queue.enqueue(1);
@@ -117,6 +120,15 @@ int main() {
     std::cout << "Queue after dequeue: ";
     std::cout << queue.front() << std::endl;
     queue.clear();
-*/
+    */
+
+    /*
+    // This is completely optional, but if you want a challenge, try to implement an explicit constructor for the Data Structure classes that takes in an initialiser list. For example, you should be able to do something like this:
+    DLList<int> list = {1, 2, 3, 4, 5};
+    Stack<int> stack = {1, 2, 3, 4, 5};
+    Queue<int> queue = {1, 2, 3, 4, 5};
+    SLList<int> simpleList = {1, 2, 3, 4, 5};
+    //For anyone able to do this, you will get 20 bonus points on the assignment. You can do this for any of the Data Structures, but you only get the bonus points once.
+    */
     return 0;
 }

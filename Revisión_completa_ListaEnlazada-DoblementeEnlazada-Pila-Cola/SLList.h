@@ -5,26 +5,25 @@
 #include <utility>
 
 
-template <typename Object> //Nombre de la plantilla, para asi poder recibir distintos tipos de datos
+template <typename Type> //Nombre de la plantilla, para asi poder recibir distintos tipos de datos
 class SLList {
 private:
-   
    //Estructura anidada privada nodo
     struct Node  {
 
-        Object data; //Guarda la información del tipo correspondiente
-        Node *next; //Puntero al siguiente nodo de la lista
+        Type m_data; //Guarda la información del tipo correspondiente
+        Node *m_next; //Puntero al siguiente nodo de la lista
 
         //Constructor por defecto y por copia -- Implicito
-        //Si se proporciona un objeto y su puntero estos serán guardados en data y next
-        //Si no se proporciona, se guardara un objeto vació en data y un puntero nulo en next
-        Node(const Object &d = Object{}, Node *n = nullptr)
-            : data{d}, next{n} {}
+        //Si se proporciona un objeto y su puntero estos serán guardados en m_data y m_next
+        //Si no se proporciona, se guardara un objeto vació en m_data y un puntero nulo en m_next
+        Node(const Type &data = Type{}, Node *next = nullptr)
+            : m_data{data}, m_next{next} {}
 
         //Constructor de referencia
-        //Recibe un nodo como parámetro, con el cual cambia sus parámetros data y next
-        Node(Object &&d, Node *n = nullptr)
-            : data{std::move(d)}, next{n} {}
+        //Recibe un nodo como parámetro, con el cual cambia sus parámetros m_data y m_next
+        Node(Type &&data, Node *next = nullptr)
+            : m_data{std::move(data)}, m_next{next} {}
     };
 
 public:
@@ -32,24 +31,24 @@ public:
     class iterator {
     public:
 
-        iterator() : current{nullptr} {} //Constructor por defecto. Implicito  Inicia su valor puntero como nulo
+        iterator() : m_current{nullptr} {} //Constructor por defecto. Implicito  Inicia su valor puntero como nulo
 
         //Operador puntero
         //Si el puntero es nulo regresa un error
         //Si contiene algo regresa el objeto al que apunta su puntero
-        Object &operator*() {
-            if(current == nullptr)
+        Type &operator*() {
+            if(m_current == nullptr)
                 throw std::logic_error("Trying to dereference a null pointer.");
-            return current->data;
+            return m_current->m_data;
         }
 
         //Operador de incremento 
-        //Si existe un siguiente nodo, cambia su puntero actual a dicho nodo y lo regresa
-        //Si no existe un siguiente nodo arroja un error lógico
+        //Si edataiste un siguiente nodo, cambia su puntero actual a dicho nodo y lo regresa
+        //Si no edataiste un siguiente nodo arroja un error lógico
         //Se encarga de mover el apuntador de la memoria
         iterator &operator++() {
-            if(current){
-                current = current->next;
+            if(m_current){
+                m_current = m_current->m_next;
             }    
             else
                 throw std::logic_error("Trying to increment past the end.");
@@ -67,7 +66,7 @@ public:
         //Operador de igualdad
         //Si ambos iteradores tienen el mismo apuntador al nodo se regresa verdadero, de lo contrario falso
         bool operator==(const iterator &rhs) const {
-            return current == rhs.current;
+            return m_current == rhs.m_current;
         }
 
         //Operador de desigualdad
@@ -77,10 +76,10 @@ public:
         }
 
     private:
-        Node *current; //Guarda un puntero al nodo actual
-        iterator(Node *p) : current{p} {} //Constructor con parámetro. Recibe un nodo como parámetro al cual apunta su apuntador
+        Node *m_current; //Guarda un puntero al nodo actual
+        iterator(Node *current) : m_current{current} {} //Constructor con parámetro. Recibe un nodo como parámetro al cual apunta su apuntador
         
-        friend class SLList<Object>; //La plantilla SLList<Object> puede acceder también los mismbros privados y prodejidos 
+        friend class SLList<Type>; //La plantilla SLList<Type> puede acceder también los mismbros privados y prodejidos 
     };
 
 public:
@@ -91,8 +90,8 @@ public:
     Crea un nodo cabeza y uno cola
     Apunta el siguiente nodo de la cabeza al nodo cola
     */
-    SLList() : head(new Node()), tail(new Node()), theSize(0) {
-        head->next = tail;
+    SLList() : m_head(new Node()), m_tail(new Node()), m_size(0) {
+        m_head->m_next = m_tail;
     }
 
     //Destructor
@@ -100,17 +99,17 @@ public:
     //Después borre el nodo cabeza y cola
     ~SLList() {
         clear();
-        delete head;
-        delete tail;
+        delete m_head;
+        delete m_tail;
     }
 
 
-    iterator begin() { return {head->next}; } //Inicio regresa el siguiente nodo a la cabeza
-    iterator end() { return {tail}; } //Final regresa el nodo cola
+    iterator begin() { return {m_head->m_next}; } //Inicio regresa el siguiente nodo a la cabeza
+    iterator end() { return {m_tail}; } //Final regresa el nodo cola
 
     //Tamaño
     //Regresa el tamaño de la lista.
-    int size() const { return theSize; }
+    int size() const { return m_size; }
 
     //Vació
     //Comprueba si la lista contiene o no algún elemento.
@@ -120,7 +119,7 @@ public:
 
     //Frente
     //Si la lista no esta vacía regresa el primer elemento.
-    Object &front() {
+    Type &front() {
         if(empty()){
             throw std::logic_error("List is empty.");
         } 
@@ -130,49 +129,53 @@ public:
 
     //Insertar al frente copia
     //Inserta un nodo en la posición frontal usando la función para insertar y un iterador que apunta al frente con el método begin
-    void push_front(const Object &x) { insert(begin(), x); }
+    void push_front(const Type &data) { insert(begin(), data); }
 
     //Insertar al frente referencia
     //Inserta un nodo en la posición frontal usando la función para insertar y un iterador que apunta al frente con el método begin
-    void push_front(Object &&x) { insert(begin(), std::move(x)); }
+    void push_front(Type &&data) { insert(begin(), std::move(data)); }
 
     //Eliminar frente
     //Elimina el elemento de la lista usando la función de borrar y un iterador que apunta al frente con el método begin
     //Si la lista esta vacía da un error lógico, ya que no hay nada que borrar
     void pop_front() {
-        if(empty())
+        if(empty()){
             throw std::logic_error("List is empty.");
+        }  
         erase(begin());
     }
 
     //Insertar por referencia
     /*
     Creamos un puntero al nodo el cual apunta al iterador
-    Hacemos que el apuntador siguiente de la cabeza se iguale a un nuevo nodo, el cual tiene una copia del objeto pasado por parámetro, y el siguiente puntero de head como current
+    Hacemos que el apuntador siguiente de la cabeza se iguale a un nuevo nodo, el cual tiene una copia del objeto pasado por parámetro, y el siguiente puntero de m_head como m_current
     Incrementamos el tamaño de la lista en 1
     Regresamos el el apuntador al nuevo nodo
     */
-    iterator insert(iterator itr, const Object &x) {
-        Node *p = itr.current;
-        head->next = new Node{x, head->next};
-        theSize++;
-        return iterator(head->next);
+    iterator insert(iterator position, const Type &data) {
+       Node *previous = begin();
+       while(previous->m_next != position.m_current){ previous = previous->m_next;}
+       m_size++;
+
+       return (previous->m_next = new Node(data,position->m_current));
     }
 
     //Insertar por copia
     /*
     Creamos un puntero al nodo el cual apunta al iterador
-    Hacemos que el apuntador siguiente de la cabeza sea a un nuevo nodo, el cual mueve el contenido del objeto pasado por parámetro, y el siguiente puntero de head como current
+    Hacemos que el apuntador siguiente de la cabeza sea a un nuevo nodo, el cual mueve el contenido del objeto pasado por parámetro, y el siguiente puntero de m_head como m_current
     Incrementamos el tamaño de la lista en 1
     Regresamos el el apuntador al nuevo nodo
     */
-    iterator insert(iterator itr, Object &&x) {
-        Node *p = itr.current;
-        head->next = new Node{std::move(x), head->next};
-        theSize++;
-        return iterator(head->next);
+    iterator insert(iterator position, Type &&data) {
+      Node *previous = m_head;
+       while(previous->m_next != position.m_current){ previous = previous->m_next;}
+        m_size++;
+
+       return {previous->m_next = new Node{std::move(data),position.m_current}}; 
     }
 
+    
     //Borrar
     /*
     Si se intenta borrar el iterador cola se da un error lógico
@@ -181,41 +184,41 @@ public:
     Reducimos el tamaño de la lista en uno
     Y regresamos el iterador copia para guardarlo en el nodo anterior y mantener la continuidad de la lista
     */
-    iterator erase(iterator itr) {
-        if (itr == end()){
+    iterator erase(iterator position) {
+        
+        if (position == end()){
             throw std::logic_error("Cannot erase at end iterator");
         }    
-        Node *p = head;
-
-        while (p->next != itr.current) { p = p->next; }
-
-        p->next = itr.current->next;
-        delete itr.current;
-        theSize--;
-        return iterator(p->next);
+        Node *current = m_head;
+        while (current->m_next != position.m_current) { current = current->m_next; }
+        current->m_next = position.m_current->m_next;
+        delete position.m_current;
+        m_size--;
+        return iterator(current->m_next);
     }
 
     //Imprimir lista
     //Imprime todos los elementos de la lista con ayuda de un iterador 
     void print() {
-        iterator itr = begin();
-        while (itr != end()) {
-            std::cout << *itr << " ";
-            ++itr;
+        iterator position = begin();
+        while (position != end()) {
+            std::cout << *position << " ";
+            ++position;
         }
         std::cout << std::endl;
     }
 
 private:
     //Miembros privados
-    Node *head; //Apuntador al inicio de la lista
-    Node *tail; //Apuntador al final de la lista
-    int theSize;//Tamaño de la lista
+    Node *m_head; //Apuntador al inicio de la lista
+    Node *m_tail; //Apuntador al final de la lista
+    int m_size;//Tamaño de la lista
     
     //Inicializado de la lista
     void init() {
-        theSize = 0; //Tamaño por defecto
-        head->next = tail; //Si la lista esta vacía el siguiente elemento del inicio es el final
+        m_size = 0; //Tamaño por defecto
+        m_head->m_next = m_tail; //Si la lista esta vacía el siguiente elemento del inicio es el final
+        m_tail->m_next = nullptr;
     }
 };
 
