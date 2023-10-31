@@ -43,8 +43,8 @@ public:
         }
 
         //Operador de incremento 
-        //Si edataiste un siguiente nodo, cambia su puntero actual a dicho nodo y lo regresa
-        //Si no edataiste un siguiente nodo arroja un error lógico
+        //Si existe un siguiente nodo, cambia su puntero actual a dicho nodo y lo regresa
+        //Si no existe un siguiente nodo arroja un error lógico
         //Se encarga de mover el apuntador de la memoria
         iterator &operator++() {
             if(m_current){

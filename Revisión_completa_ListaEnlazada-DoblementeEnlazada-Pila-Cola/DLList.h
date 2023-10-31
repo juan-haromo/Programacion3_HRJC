@@ -10,7 +10,7 @@ class DLList
 {
 
 //Nested struct node
-private: struct Node{
+protected: struct Node{
 
         Type m_data; //Guarda el tipo de dato
 
@@ -109,7 +109,7 @@ public: class iterator{
         //indica si el ambos iteradores apuntan a distinta dirección de memoria
         bool operator!=(const iterator &rhs) {return m_current != rhs.m_current;}
 
-    private:
+    protected:
         //Puntero al nodo actual
         Node *m_current;
 
@@ -210,6 +210,7 @@ public:
     void push_front(Type &&object){
        insert(begin(),std::move(object));
     }
+    
 
     //Eliminar al inicio
     //Elimina el primer elemento de la lista
@@ -222,6 +223,15 @@ public:
         }
     }
 
+    void pop_back(){
+          if(IsEmpty()){
+            throw std::logic_error("List is empty");
+        }
+        else{
+          erase(end().m_current->m_previous);
+        }
+    }
+
     //Borrar
     //Borra el elemento encontrado en la posición indicada por el iterador
     iterator erase(iterator itr){
@@ -229,15 +239,13 @@ public:
         if(itr == end()){
             throw std::logic_error("Cannot erase at end iterator");
         }
-        Node *position = m_head;
-        while (position->m_next != itr.m_current){
-            position = position->m_next;
-        }
-        position->m_next = itr.m_current->m_next;
+        Node *previous = itr.m_current->m_previous;
+        Node *next = itr.m_current->m_next;
+        next->m_previous = previous;
+        previous->m_next = next;
         delete itr.m_current;
         m_size--;
-        return iterator(m_head->m_next);
-        
+        return iterator(previous); 
     }
 
     //Borrar
@@ -279,7 +287,7 @@ public:
     //Regresa si la lista esta o no vacía
     bool IsEmpty() const { return m_size == 0; }
 
-private:
+protected:
 
     Node *m_head; //Nodo inicial
     Node *m_tail; //Nodo final
