@@ -17,9 +17,11 @@ Es un tipo de lista en el cual los nodos cuentan con un único puntero al siguie
         Type m_data; //Guarda la información del tipo correspondiente
         Node *m_next; //Puntero al siguiente nodo de la lista
 
-        //Constructor por defecto y por copia -- Implícito
-        //Si se proporciona un objeto y su puntero estos serán guardados en m_data y m_next
-        //Si no se proporciona, se guardara un objeto vació en m_data y un puntero nulo en m_next
+        /*
+        Constructor por defecto y por copia -- Implícito
+        Si se proporciona un objeto y su puntero estos serán guardados en m_data y m_next
+        Si no se proporciona, se guardara un objeto vació en m_data y un puntero nulo en m_next
+        */
         Node(const Type &data = Type{}, Node *next = nullptr)
             : m_data{data}, m_next{next} {}
 
@@ -65,20 +67,23 @@ El constructor privado permite crear un iterado que apunte a un nodo especifico.
 
 ```c++
 public:
-    //Operador puntero
-    //Si el puntero es nulo regresa un error
-    //Si contiene algo regresa el objeto al que apunta su puntero
+    /*
+    Operador puntero
+    Si el puntero es nulo regresa un error
+    Si contiene algo regresa el objeto al que apunta su puntero
+    */
     Type &operator*() {
         if(m_current == nullptr)
             throw std::logic_error("Trying to dereference a null pointer.");
             
         return m_current->m_data;
     }
-
-    //Operador de incremento 
-    //Si existe un siguiente nodo, cambia su puntero actual a dicho nodo y lo regresa
-    //Si no existe un siguiente nodo arroja un error lógico
-    //Se encarga de mover el apuntador de la memoria
+    /*
+    Operador de incremento 
+    Si existe un siguiente nodo, cambia su puntero actual a dicho nodo y lo regresa
+    Si no existe un siguiente nodo arroja un error lógico
+    Se encarga de mover el apuntador de la memoria
+    */
         iterator &operator++() {
             if(m_current){
                 m_current = m_current->m_next;
@@ -112,8 +117,8 @@ public:
 ### Constructor SLList (publico)
 
 ```  c++
-    //Constructor implícito
     /*
+    Constructor implícito
     Crea una lista vacía de tamaño 0
     Crea un nodo cabeza y uno cola
     Apunta el siguiente nodo de la cabeza al nodo cola
@@ -126,9 +131,11 @@ public:
 ### Destructor SSList (publico)
 
 ```c++ 
-    //Destructor
-    //Vacía la lista con el método clear
-    //Después borre el nodo cabeza y cola
+    /*
+    Destructor
+    Vacía la lista con el método clear
+    Después borre el nodo cabeza y cola
+    */
     ~SLList() {
         clear();
         delete m_head;
@@ -191,13 +198,13 @@ public:
     */
     iterator insert(iterator position, const Type &data) {
        Node *previous = begin();
-       while(previous->m_next != position.m_current){ previous = previous->m_next;}
+       while(previous->m_next != position.m_current){ previous = previous->m_next;} //Ciclo while que puede recorrer todos los elementos. Complejidad lineal
        m_size++;
 
        return (previous->m_next = new Node(data,position->m_current));
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Cuenta un un ciclo while que pasa por todos los elemento hasta encontrar el deseado.
 
 #### Inserta por copia en una posición (publico)
 
@@ -211,14 +218,14 @@ Complejidad $O(N)$
     */
     iterator insert(iterator position, Type &&data) {
       Node *previous = m_head;
-       while(previous->m_next != position.m_current){ previous = previous->m_next;}
+       while(previous->m_next != position.m_current){ previous = previous->m_next;} //Ciclo while que puede recorrer todos los elementos. Complejidad lineal
         m_size++;
 
        return {previous->m_next = new Node{std::move(data),position.m_current}}; 
     }
 ```
 
-Complejidad $O(N)$
+Complejidad $O(N)$. Cuenta un un ciclo while que pasa por todos los elemento hasta encontrar el deseado.
 
 #### Borrar (publico)
 
@@ -237,7 +244,7 @@ Complejidad $O(N)$
             throw std::logic_error("Cannot erase at end iterator");
         }    
         Node *current = m_head;
-        while (current->m_next != position.m_current) { current = current->m_next; }
+        while (current->m_next != position.m_current) { current = current->m_next; } //Ciclo while que puede recorrer todos los elementos. Complejidad lineal
         current->m_next = position.m_current->m_next;
         delete position.m_current;
         m_size--;
@@ -245,7 +252,7 @@ Complejidad $O(N)$
     }
 ```
 
-Complejidad $O(N)$
+Complejidad $O(N)$ Cuenta un un ciclo while que pasa por todos los elemento hasta encontrar el deseado.
 
 #### Imprimir (publico)
 
@@ -254,14 +261,14 @@ Complejidad $O(N)$
     //Imprime todos los elementos de la lista con ayuda de un iterador 
     void print() {
         iterator position = begin();
-        while (position != end()) {
+        while (position != end()) { //Ciclo while que recorre siempre todos los elementos. Complejidad lineal
             std::cout << *position << " ";
             ++position;
         }
         std::cout << std::endl;
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Cuenta un un ciclo while que pasa siempre por todos los elemento hasta encontrar el deseado.
 
 #### Inicializar (privado)
 
@@ -274,7 +281,7 @@ Complejidad $O(N)$
     }
 ```
 
-Complejidad $O(1)$
+Complejidad $O(1)$. Constante, realiza solo  asignación de valores.
 
 Método usado por el constructor para inicializar la estructura
 
@@ -447,9 +454,11 @@ Se emplea el constructor por defecto
 #### Insertar por copia con referencia (publico)
 
 ```c++
-    //Insertar con iterador
-    //Recibe un iterador y un objeto
-    //Inserta el objeto en la posición del iterador
+    /*
+    Insertar con iterador
+    Recibe un iterador y un objeto
+    Inserta el objeto en la posición del iterador
+    */
     iterator insert(iterator position, const Type &object) {
        Node *p_current = position.m_current;
        m_size++;
@@ -457,19 +466,21 @@ Se emplea el constructor por defecto
     }
 ```
 
-Complejidad $O(1)$
+Complejidad $O(1)$. Constante, recibe un valor y a partir de este crea un nuevo nodo.
 
 #### Insertar con generación de iterador (publico)
 
 ```c++
-   //Insertar con posición 
-    //Recibe un entero y un objeto
-    //En la posición indicada se genera un iterador y se inserta el objeto 
+   /*
+    Insertar con posición 
+    Recibe un entero y un objeto
+    En la posición indicada se genera un iterador y se inserta el objeto 
+    */
     void insert(int position, const Type &object){
         insert(generateIterator(position),object);
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(N)$. Lineal, llama a una función con tiempo constante y una con tiempo lineal, por lo cual lineal es su tiempo.
 
 #### Insertar por referencia (publico)
 
@@ -483,7 +494,7 @@ Complejidad $O(1)$
     }
 ```
 
-Complejidad $O(1)$
+Complejidad $O(1)$ Constante, recibe un valor y a partir de este crea un nuevo nodo.
 
 #### Insertar por referencia con generación de iterador (publico)
 
@@ -494,18 +505,20 @@ Complejidad $O(1)$
         insert(generateIterator(position),object);
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Lineal, llama a una función con tiempo constante y una con tiempo lineal, por lo cual lineal es su tiempo.
 
 
 #### Generar iterador (publico)
 
 ```c++
-    //Generar iterador
-    //Genera un iterador a partir de un entero
-    //EWl iterador se encuentra en la posición indicada por el entero
+    /*
+    Generar iterador
+    Genera un iterador a partir de un entero
+    El iterador se encuentra en la posición indicada por el entero
+    */
     iterator generateIterator(int position){
         
-        if(position<0 || position>m_size+1){
+        if(position<0 || position>m_size+1){ //Si se intenta generar un iterador fuera de los limites se arroja un error
             throw std::logic_error("Trying to generate an out of bounds iterator");
         }
         else{
@@ -521,7 +534,7 @@ Complejidad $O(N)$
 
 Convierte un entero en un iterador moviendo "X" posiciones a partir del inicio de la lista.<br>
 
-Complejidad $O(N)$
+Complejidad $O(N)$. Avanza por toda la lista hasta llegar a la posición deseada, siendo esta en el peor de los casos la ultima posición.
 
 #### Agregar por copia al final (publico)
 
@@ -532,7 +545,7 @@ Complejidad $O(N)$
         insert(end(),object);
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo cual ese es su tiempo.
 
 #### Agregar al final por movimiento (publico)
 
@@ -543,7 +556,7 @@ Complejidad $O(1)$
        insert(end(),std::move(object));
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo cual ese es su tiempo.
 
 
 #### Agregar al inicio por referencia (publico)
@@ -556,7 +569,7 @@ Complejidad $O(1)$
     }    
 ```
 
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo cual ese es su tiempo.
 
 #### Eliminar al inicio (publico)
 
@@ -565,7 +578,7 @@ Complejidad $O(1)$
     //Eliminar al inicio
     //Elimina el primer elemento de la lista
     void pop_front(){
-        if(IsEmpty()){
+        if(IsEmpty()){//Si la lista esta vacía de un error.
             throw std::logic_error("List is empty");
         }
         else{
@@ -574,13 +587,13 @@ Complejidad $O(1)$
     }
 ```
 
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo cual ese es su tiempo.
 
 #### Eliminar al final (publico)
 
 ```c++
    void pop_back(){
-          if(IsEmpty()){
+          if(IsEmpty()){ //Si la lista esta vacía de un error.
             throw std::logic_error("List is empty");
         }
         else{
@@ -589,7 +602,7 @@ Complejidad $O(1)$
     }
 ```
 
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo cual ese es su tiempo.
 
 #### Borrar (publico)
 ```c++
@@ -602,7 +615,7 @@ Complejidad $O(1)$
         }
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo cual ese es su tiempo.
 
 #### Borrar con generación de nodo (publico)
 
@@ -613,7 +626,7 @@ Complejidad $O(1)$
         erase(generateIterator(position));
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Complejidad $O(N)$. Lineal, llama a una función con tiempo constante y una con tiempo lineal, por lo cual lineal es su tiempo.
 
 ####  Limpiar (publico)
 
@@ -626,7 +639,7 @@ Complejidad $O(N)$
         }
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. La función se realiza el mismo numero de veces que de elementos contenga la lista, por lo que es lineal.
 
 #### Imprimir  (publico)
 
@@ -642,15 +655,17 @@ Complejidad $O(N)$
         std::cout << std::endl;
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Recorre e imprime todos los elementos de una lista, por lo que su tiempo es lineal.
 
 #### Inicializar (privado)
 
 ```c++
- //Inicializar
-    //Crea el nodo inicial y final
-    //Apunta el siguiente nodo del inicial al final y el anterior a nulo
-    //Apunta el anterior nodo del final al inicial y el siguiente a nulo
+    /*
+    Inicializar
+    Crea el nodo inicial y final
+    Apunta el siguiente nodo del inicial al final y el anterior a nulo
+    Apunta el anterior nodo del final al inicial y el siguiente a nulo
+    */
     void init(){
         m_head = new Node();
         m_tail = new Node();
@@ -663,7 +678,7 @@ Complejidad $O(N)$
         m_tail->m_previous = m_head;
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Solo inicializa valores, por lo que su tiempo es constante.
 
 ### Getters
 
@@ -733,7 +748,7 @@ Usamos la misma secuencia de funciones del destructor de DLList para el destruct
     }
 ```
 
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo que sus tiempo es constante.
 
 
 #### Agregar por copia (publico)
@@ -744,7 +759,7 @@ Complejidad $O(1)$
         DLList<Type>::push_back(std::move(data)); //Usamos la función push back que agrega un elemento al final
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo que sus tiempo es constante.
 
 #### Imprimir  (publico)
 
@@ -754,7 +769,7 @@ Complejidad $O(1)$
         DLList<Type>::print(); //Imprimimos usando el método imprimir de la DLList
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Llama a una función con tiempo constante, por lo que su tiempo es constante.
 
 #### Pop (publico)
 ```c++
@@ -763,7 +778,7 @@ Complejidad $O(N)$
        DLList<Type>::pop_back(); //Eliminamos el ultimo elemento del stack usando el pop bka c de la DLList
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo que sus tiempo es constante.
 
 #### Limpiar (publico)
 
@@ -773,7 +788,7 @@ Complejidad $O(1)$
         DLList<Type>::clear();//Limpiamos el stack usando la función limpiar de la DLList
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Llama a una función lineal. por lo cual su tiempo es lineal.
 
 #### Top (publico)
 
@@ -782,7 +797,7 @@ Complejidad $O(N)$
         return DLList<Type>::m_tail->m_previous->m_data; //Regresamos la información del elemento que se encuentra en el top del stack
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$ Regresa un elemento solo haciendo accesos, por lo cual es lineal.
 
 ## *Queue*
 
@@ -825,7 +840,7 @@ Debido a que es un derivado de la lista doblemente enlazada, heredaremos a parti
         DLList<Type>::push_back(data); //Usamos la función pop back de DLList que agrega un dato al final 
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo que sus tiempo es constante.
 
 #### Enfilar por referencia  (publico)
 
@@ -836,7 +851,7 @@ Complejidad $O(1)$
         DLList<Type>::push_back(std::move(data));  //Usamos la función pop back de DLList que agrega un dato al final 
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo que sus tiempo es constante.
 
 #### Des-enfilar (publico)
 
@@ -847,7 +862,7 @@ Complejidad $O(1)$
         DLList<Type>::pop_front(); //Usamos la función pop_front de la DLList que elimina el primer elemento de la lista
     }
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo que sus tiempo es constante.
  
 #### Imprimir  (publico)
 
@@ -858,7 +873,7 @@ Complejidad $O(1)$
         DLList<Type>::print(); //Usamos la función de imprimir de la DLList
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Llama a una función con complejidad lineal, por lo cual esa es su complejidad.
 
 #### Front  (publico)
  
@@ -869,7 +884,7 @@ Complejidad $O(N)$
         return DLList<Type>::m_head->m_next->m_data;
     }   
 ```
-Complejidad $O(1)$
+Complejidad $O(1)$. Llama a una función de tiempo constante, por lo que sus tiempo es constante.
 
 #### Limpiar (publico)
 
@@ -880,4 +895,4 @@ Complejidad $O(1)$
         DLList<Type>::clear(); //Borramos todos los elementos de la lista usando la función clear de DLList
     }
 ```
-Complejidad $O(N)$
+Complejidad $O(N)$. Llama a una función con complejidad lineal, por lo cual esa es su complejidad.
