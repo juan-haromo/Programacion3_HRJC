@@ -436,7 +436,9 @@ Ahora realizamos lo siguiente:
 >
 >[3]	MrRocket, “Árbol Avl de inserción y eliminación y ordenamiento”, 05-jul-2018. [En línea]. Disponible en: https://www.youtube.com/watch?v=UnhMzEaLDdw. [Consultado: 28-oct-2023].
 
+## Splay trees
 
+Los *splay trees* se basan en que una complejidad de $O(N)$ no es tan mala, en especial cuando no curre frecuente mente.
 
 # Opinion critica
 
