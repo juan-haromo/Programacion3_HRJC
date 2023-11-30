@@ -29,6 +29,6 @@ Para realizar este algoritmo se mantiene una tabla similar a la del algoritmo de
 
 # Bibliografía
 
-[1]	M. A. Weiss, Data Structures and Algorithm Analysis in C++, 4a ed. Upper Saddle River, NJ, Estados Unidos de América: Pearson, 2013.
-[2]	Universitat Politècnica de València-UPV, “S3.4- Algoritmo de Dijkstra | | UPV”, 29-ene-2013. [En línea]. Disponible en: https://www.youtube.com/watch?v=eLFEIxDEphA. [Consultado: 30-nov-2023].
-[3]	M. Sambol, “Prim’s algorithm in 2 minutes”, 28-oct-2012. [En línea]. Disponible en: https://www.youtube.com/watch?v=cplfcGZmX7I. [Consultado: 30-nov-2023].
+[1]	M. A. Weiss, Data Structures and Algorithm Analysis in C++, 4a ed. Upper Saddle River, NJ, Estados Unidos de América: Pearson, 2013.<br>
+[2]	Universitat Politècnica de València-UPV, “S3.4- Algoritmo de Dijkstra | | UPV”, 29-ene-2013. [En línea]. Disponible en: https://www.youtube.com/watch?v=eLFEIxDEphA. [Consultado: 30-nov-2023].<br>
+[3]	M. Sambol, “Prim’s algorithm in 2 minutes”, 28-oct-2012. [En línea]. Disponible en: https://www.youtube.com/watch?v=cplfcGZmX7I. [Consultado: 30-nov-2023].<br>
